@@ -45,4 +45,6 @@ ld hello/assembly/hello.o -o hello/bin/assembly
 ```bash
 nvcc --version
 nvidia-smi
+nvcc hello/cuda/hello.cu -o hello/bin/cuda
+./hello/bin/cuda
 ```
