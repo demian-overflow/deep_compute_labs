@@ -1,0 +1,17 @@
+# Binaries
+**/bin/
+**/target/
+
+# C
+*.o
+*.out
+*.exe
+examples/c/hello
+
+# Assembly
+*.obj
+examples/assembly/hello
+
+# CUDA
+*.ptx
+examples/cuda/hello 
