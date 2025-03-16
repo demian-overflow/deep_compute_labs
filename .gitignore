@@ -15,3 +15,8 @@ examples/assembly/hello
 # CUDA
 *.ptx
 examples/cuda/hello 
+
+# LaTeX
+*.pdf
+*.aux
+*.log

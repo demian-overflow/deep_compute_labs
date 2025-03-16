@@ -1,0 +1,178 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+
+\geometry{margin=1in}
+
+\title{Mathematical Foundations for Deep CS, ML, and Cryptography}
+
+\begin{document}
+
+\maketitle
+
+\section{Overview}
+
+This document outlines a comprehensive learning plan covering the mathematical foundations needed to understand machine learning research papers, cryptography (including blockchain applications), and computer science fundamentals.
+
+\section{Core Mathematical Foundations}
+
+\subsection{Phase 1: Essential Mathematics}
+
+\subsubsection{Linear Algebra}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Topics:} Vectors, matrices, linear transformations, eigenvalues/eigenvectors, vector spaces
+    \item \textbf{Applications:} Neural networks, dimensionality reduction, computer graphics
+    \item \textbf{Resources:}
+    \begin{itemize}
+        \item ``Linear Algebra Done Right'' by Sheldon Axler
+        \item Gilbert Strang's MIT OCW Linear Algebra course
+        \item 3Blue1Brown's ``Essence of Linear Algebra'' video series
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Calculus}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Topics:} Limits, derivatives, integrals, multivariable calculus, partial derivatives
+    \item \textbf{Applications:} Optimization in ML, gradient descent, backpropagation
+    \item \textbf{Resources:}
+    \begin{itemize}
+        \item ``Calculus'' by James Stewart
+        \item MIT OCW Calculus courses
+        \item 3Blue1Brown's ``Essence of Calculus'' series
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Probability \& Statistics}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Topics:} Random variables, distributions, expectation, hypothesis testing, Bayesian statistics
+    \item \textbf{Applications:} Statistical ML models, uncertainty quantification, cryptographic security
+    \item \textbf{Resources:}
+    \begin{itemize}
+        \item ``All of Statistics'' by Larry Wasserman
+        \item ``An Introduction to Statistical Learning'' by James, Witten, Hastie, Tibshirani
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Discrete Mathematics}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Topics:} Logic, set theory, combinatorics, recursion, graph theory
+    \item \textbf{Applications:} Algorithms, data structures, automata theory
+    \item \textbf{Resources:}
+    \begin{itemize}
+        \item ``Discrete Mathematics and Its Applications'' by Kenneth Rosen
+        \item ``Concrete Mathematics'' by Graham, Knuth, and Patashnik
+    \end{itemize}
+\end{itemize}
+
+\subsection{Phase 2: Advanced Topics}
+
+\subsubsection{Abstract Algebra}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Topics:} Groups, rings, fields, Galois theory
+    \item \textbf{Applications:} Cryptography, error-correcting codes, quantum computing
+    \item \textbf{Resources:}
+    \begin{itemize}
+        \item ``Abstract Algebra'' by Dummit and Foote
+        \item ``A Book of Abstract Algebra'' by Charles Pinter
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Number Theory}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Topics:} Modular arithmetic, prime numbers, congruences, primality testing
+    \item \textbf{Applications:} Public-key cryptography, blockchain, hashing
+    \item \textbf{Resources:}
+    \begin{itemize}
+        \item ``Elementary Number Theory'' by David Burton
+        \item ``An Introduction to the Theory of Numbers'' by Hardy and Wright
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Information Theory}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Topics:} Entropy, mutual information, channel capacity, coding theory
+    \item \textbf{Applications:} Compression, ML, cryptography
+    \item \textbf{Resources:}
+    \begin{itemize}
+        \item ``Elements of Information Theory'' by Cover and Thomas
+        \item ``Information Theory, Inference, and Learning Algorithms'' by David MacKay
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Optimization Theory}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Topics:} Convex optimization, gradient methods, Lagrangian duality
+    \item \textbf{Applications:} Training ML models, operations research
+    \item \textbf{Resources:}
+    \begin{itemize}
+        \item ``Convex Optimization'' by Boyd and Vandenberghe
+        \item ``Numerical Optimization'' by Nocedal and Wright
+    \end{itemize}
+\end{itemize}
+
+\section{Specialized Tracks}
+
+\subsection{Machine Learning Mathematics}
+\begin{itemize}[leftmargin=*]
+    \item Functional analysis (Hilbert spaces, kernels)
+    \item Computational linear algebra
+    \item Probabilistic graphical models
+    \item Differential geometry (for manifold learning)
+    \item Statistical learning theory
+\end{itemize}
+
+\subsection{Cryptography \& Blockchain Mathematics}
+\begin{itemize}[leftmargin=*]
+    \item Elliptic curve cryptography
+    \item Zero-knowledge proofs
+    \item Hash functions and collision resistance
+    \item Merkle trees and verification
+    \item Secure multi-party computation
+\end{itemize}
+
+\subsection{Theoretical Computer Science}
+\begin{itemize}[leftmargin=*]
+    \item Computability theory
+    \item Algorithmic complexity
+    \item Formal languages and automata
+    \item Type theory
+    \item Category theory
+\end{itemize}
+
+\section{Learning Approach}
+
+\begin{enumerate}
+    \item \textbf{Foundations First:} Master core topics before specializing
+    \item \textbf{Practice Problems:} Implement concepts in code using languages in this repo
+    \item \textbf{Applied Projects:} Create mini-projects demonstrating each concept
+    \item \textbf{Paper Reading:} Start with seminal papers, gradually moving to recent research
+    \item \textbf{Interdisciplinary Connections:} Explore how concepts connect across domains
+\end{enumerate}
+
+\section{Suggested Learning Projects}
+
+\begin{enumerate}
+    \item Implement basic cryptographic primitives (RSA, elliptic curves)
+    \item Build a simple neural network from scratch using only linear algebra
+    \item Create visualization tools for mathematical concepts
+    \item Implement common ML algorithms using only numpy
+    \item Develop simple blockchain primitives focusing on cryptographic aspects
+\end{enumerate}
+
+\section{Assessment Strategies}
+
+\begin{itemize}[leftmargin=*]
+    \item Implement mathematical algorithms in C, Rust, and CUDA
+    \item Reproduce results from foundational papers
+    \item Create teaching notebooks explaining complex concepts
+    \item Contribute to open-source math/ML/crypto libraries
+\end{itemize}
+
+\vspace{1cm}
+\noindent This plan follows a progressive approach, building fundamentals before tackling advanced topics. Adjust the pace based on your background and specific interests in ML, cryptography, or theoretical CS.
+
+\end{document} 
