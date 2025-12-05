@@ -1,6 +1,6 @@
 # Memory (Virtual Memory) — Overview
 
-This document describes core concepts used by operating systems to provide virtual memory and manage pages, page tables, translation lookaside buffers (TLBs), and folios (compound pages). Each section is short and includes a small mermaid diagram to keep concepts modular.
+This document describes core concepts used by operating systems to provide virtual memory and manage pages, page tables, translation lookaside buffers (TLBs), and folios (compound pages).
 
 ---
 
