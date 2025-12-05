@@ -115,3 +115,152 @@ flowchart LR
 - If you get relocation or undefined symbol errors when using `ld` directly, try using `gcc` as the linker driver: `gcc -o hello hello.o` or to avoid PIE: `gcc -no-pie -o hello hello.s`.
 - Inspect objects with `readelf` and `objdump` to understand sections, symbols, and relocations.
 
+## Assembly syntax: AT&T vs Intel (GAS vs NASM)
+
+This project supplies both GAS/AT&T (`.s`) examples and NASM/Intel (`.nasm`) samples. Both are valid for x86-64, but they use different textual conventions; knowing both helps when reading examples and debugging toolchain behavior.
+
+### Key differences
+- Operand order:
+    - AT&T: source, destination (e.g., `movq %rax, %rbx` → rbx ← rax)
+    - Intel: destination, source (e.g., `mov rbx, rax` → rbx ← rax)
+- Register/immediate prefixes:
+    - AT&T: registers use `%` (e.g., `%rax`) and immediates use `$` (e.g., `$1`).
+    - Intel: no `%`/`$` prefixes (e.g., `rax`, `1`).
+- Size suffixes and directives:
+    - AT&T: mnemonics often use suffixes `b/w/l/q` to indicate operand size (e.g., `movb`, `movq`), and directives like `.text`, `.data`, `.globl`.
+    - Intel (NASM): size is implied by the operand form, and directives are `section .text`, `section .data`, `global` and `db`/`dq` etc.
+- Memory addressing:
+    - AT&T: `disp(base, index, scale)` e.g., `8(%rbp)`, `(%rax,%rcx,4)`.
+    - Intel: `[base + index*scale + disp]` e.g., `[rbp + 8]`, `[rax + rcx*4]`.
+
+### Short examples (Linux x86-64 write syscall)
+AT&T / GAS:
+```asm
+        movq $1, %rax
+        movq $1, %rdi
+        lea msg(%rip), %rsi
+        movq $len, %rdx
+        syscall
+```
+
+NASM / Intel:
+```nasm
+        mov rax, 1
+        mov rdi, 1
+        mov rsi, msg
+        mov rdx, len
+        syscall
+```
+
+### Useful directives and tools
+- Sections: `.text`, `.data`, `.rodata`, `.bss` (GAS) and `section .text`, `section .data` (NASM).
+- Data directives: `.byte/.word/.long/.quad` (GAS) and `db/dw/dd/dq` (NASM).
+- Symbol export: `.globl` (GAS) / `global` (NASM).
+- Use `objdump -d -Mintel` or `.intel_syntax noprefix` in GAS if you prefer Intel syntax while staying in the GAS toolchain.
+
+### References
+- GNU Assembler manual: https://sourceware.org/binutils/docs/as/
+- NASM manual: https://www.nasm.us/doc/
+- Intel SDM (ISA reference): https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html
+- System V AMD64 ABI: https://refspecs.linuxfoundation.org/elf/x86_64-abi-0.99.pdf
+- AT&T vs Intel syntax summary: https://en.wikipedia.org/wiki/X86_assembly_language#Syntax
+- Instruction reference (quick): https://www.felixcloutier.com/x86/
+
+### Resolution — which syntax to prefer? ✅
+For a multi-architecture learning pathway (x86 plus non-Intel architectures like ARM or RISC-V), here's a practical guideline:
+
+- Prioritise understanding architecture-agnostic concepts first: registers, addressing modes, calling conventions, and how toolchains assemble, link, and load programs. Syntax is a surface layer—concepts carry across architectures.
+- If you want a single default for this repo and Linux-targeted labs, prefer **GAS / AT&T** (the default for GNU toolchains). Reasons:
+    - It's the GNU assembler default and integrates with GCC/ld workflows used throughout these labs.
+    - Many OS-level and kernel examples, as well as distribution toolchains, use GAS by default.
+    - Using GAS keeps the command-line toolchain and tutorial examples consistent across architectures that use the GNU tools.
+- If learning readability and quick experimentation is your top priority, **Intel / NASM** is often easier for newcomers (destination-first order). You can still use NASM for isolated examples and switch to GAS for low-level toolchain and distro-native builds.
+- Best practice: learn both syntaxes (or at least how to read both). Also practice switching using `.intel_syntax noprefix` with GAS or using `objdump` with `-Mintel` / `-Mat&t` to inspect output.
+
+By adopting GAS/AT&T as the canonical syntax for the labs while exposing Intel/NASM examples, learners get the best of both worlds: toolchain compatibility and readable examples.
+
+## Examples: side-by-side (short, annotated)
+Here are a few small examples showing common instructions and addressing in both syntaxes. These demonstrate identical behaviour, just different textual conventions.
+
+1) Move immediate to register
+
+```asm
+// AT&T (GAS)
+    movq $1, %rax   # rax = 1
+
+// Intel (NASM)
+    mov rax, 1      ; rax = 1
+```
+
+2) Load from stack (base + displacement)
+
+```asm
+// AT&T (GAS)
+    movq -8(%rbp), %rax  # load qword at rbp-8 -> rax
+
+// Intel (NASM)
+    mov rax, [rbp-8]     ; load qword at rbp-8 -> rax
+```
+
+3) Load address (RIP-relative and LEA)
+
+```asm
+// AT&T (GAS)
+    lea msg(%rip), %rsi   # rsi = address of msg
+
+// Intel (NASM)
+    lea rsi, [rip + msg]  ; rsi = address of msg
+```
+
+### Quick notes
+- The instructions are the same; the textual differences are operands order, prefixes, and memory address notation.
+- When disassembling, `objdump -d -Mintel` will show Intel syntax if you prefer it.
+
+```bash
+# show disassembly in Intel syntax
+objdump -d -Mintel hello/assembly/hello.o
+```
+
+## Switch GAS to Intel style (if you prefer Intel syntax) 🔁
+GAS supports an Intel-like syntax mode. Add the directive at the top of a `.s` file and use Intel-style instructions without `%`/$ prefixes:
+
+```asm
+.intel_syntax noprefix
+.section .text
+.global _start
+_start:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg
+    mov rdx, len
+    syscall
+```
+
+Mermaid diagram (concept):
+```mermaid
+flowchart LR
+    GAS["GAS/AT&T file (.s)"] -->|.intel_syntax| GASintel["GAS with Intel-like syntax"]
+    GASintel --> as["GNU assembler (as)"]
+    as --> O["hello.o"]
+```
+
+⚠️ Note: `.intel_syntax noprefix` tells the assembler to parse Intel-like syntax; it does not make your code NASM-compatible — NASM and GAS still use different directive sets.
+
+## ARM / RISC-V — short note for multi-arch learners
+If you plan to learn architectures beyond x86, here are a few short pointers:
+
+- ARM has a distinct assembly language and register set (e.g., `r0`..`r12` for ARMv7 or `x0`..`x30` for AArch64). ARM uses different calling conventions, instruction sets (ARM vs Thumb), and assembler directives. Typical assemblers include `as`/`gcc` for ARM or `clang` builtins.
+- RISC-V is a newer, simple RISC ISA. GNU toolchain support is available (`riscv64-unknown-elf-gcc`, `as`, `objdump`). RISC-V assembly uses `x0`..`x31` register names or ABI names like `a0`..`a7`, `t0`..`t6`.
+- For both ARM and RISC-V, there is no AT&T / Intel syntax debate — the syntax is native to the ISA and the assembler you use.
+
+References / docs for ARM and RISC-V:
+- ARM Architecture Manuals: https://developer.arm.com/documentation
+- AArch64 (ARMv8-A) ABI and manuals: https://developer.arm.com/documentation/100069/0001
+- RISC-V specifications: https://riscv.org/specifications/
+- RISC-V GNU Toolchain: https://github.com/riscv/riscv-gnu-toolchain
+
+### Practical advice
+- If you're going multi-arch, learn to read assembly idioms for each ISA and focus on architecture-agnostic concepts (calling conventions, syscalls, memory model). Use `gcc`/`as` for platform-native examples and the appropriate cross-toolchain when experimenting with non-x86 architectures.
+
+
+
