@@ -10,6 +10,8 @@ examples/c/hello
 
 # Assembly
 *.obj
+*.bin
+*.elf
 examples/assembly/hello
 
 # CUDA

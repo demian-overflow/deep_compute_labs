@@ -84,6 +84,33 @@ flowchart LR
   QEMU -->|gdb| GDB[gdb target remote]
 ```
 
+### Debugging sequence for a pre-kernel session
+
+Below is a sample sequence diagram showing the typical debug steps when using `-device loader` plus `-S -gdb`:
+
+```mermaid
+sequenceDiagram
+  participant Host as Host/User
+  participant Q as QEMU
+  participant G as GDB
+  participant CPU as GuestCPU
+
+  Host->>Q: start QEMU with -device loader,file=...,addr=... -S -gdb tcp::1234
+  Q->>Q: load binary at guest PAddr
+  Q-->>Host: QEMU paused waiting for gdb attach
+  Host->>G: connect (gdb target remote :1234)
+  G->>Q: set $rip to binary address
+  G->>Q: continue
+  Q->>CPU: execute instructions
+  CPU->>Q: write serial output
+  Q->>Host: serial forwarded to stdio
+  Host->>G: inspect memory & regs, set breakpoints
+  G->>Q: stop / step / dump memory
+  Host->>Q: monitor pmemsave or use -d logs to collect traces
+```
+
+If you used the example in `system/emulation/examples/pre-kernel`, follow the README there to run it and reconnect gdb. The Makefile shows a `run` and a `gdb` target for convenience.
+
 Notes:
 - `-device loader` places the given raw binary at the specified guest physical address. It does not set CPU start vector or entry point — make sure your binary entry point matches expected guest CPU reset vector or map it to a location your code will run.
 - Use `-S` to pause CPU at startup, so you can connect with gdb before the guest executes.

@@ -115,6 +115,67 @@ flowchart LR
 - If you get relocation or undefined symbol errors when using `ld` directly, try using `gcc` as the linker driver: `gcc -o hello hello.o` or to avoid PIE: `gcc -no-pie -o hello hello.s`.
 - Inspect objects with `readelf` and `objdump` to understand sections, symbols, and relocations.
 
+## CPU execution modes on x86 — Real, Protected, Long mode ⚙️
+
+The x86 architecture supports several CPU execution modes. At reset the CPU starts in 16-bit "real mode" and firmware (BIOS/UEFI) typically runs before loading a bootloader or kernel. A bootloader can switch the CPU into Protected mode (32-bit), and then into Long mode (64-bit). Many userland and kernel expectations change between modes.
+
+```mermaid
+flowchart LR
+    Reset[CPU Reset] --> Real[Real mode (16-bit)]
+    Real --> BIOS[Bios/UEFI]
+    BIOS --> Bootloader[Bootloader
+go to protected/long mode]
+    Bootloader --> Protected[Protected mode (32-bit)]
+    Protected --> Long[Long mode (64-bit)]
+    Long --> Kernel[Kernel (64-bit)]
+    Kernel --> Userland[Userland (64-bit)]
+```
+
+Brief differences and common instruction examples per mode:
+
+- Real mode (16-bit): small memory model, segmentation-based addressing, BIOS interrupts available.
+    - Common instructions: far/jump & call, `int 0x10` (BIOS video), `mov ax,`/`bx`/`si`, `in`/`out` (I/O ports), `cli`/`sti`, `hlt`.
+    - Example (GAS/AT&T):
+        ```asm
+        .code16
+        mov $0x3f8, %dx  # ttyS0 port
+        mov $'A', %al
+        out %al, %dx
+        int $0x10         # BIOS video interrupt
+        cli
+        hlt
+        ```
+
+- Protected mode (32-bit): flat addressing (if set up), 32-bit registers, interrupts still available; switch via `lgdt` + set CR0.PE + `ljmp` to flush prefetch.
+    - Common instructions: `lgdt`, `mov` to control registers (CR0), far jumps (`ljmp`), `int 0x80` (Linux 32-bit syscall), `in`/`out`.
+    - Example (GAS/AT&T):
+        ```asm
+        # set up GDT, enable protected mode (sketch)
+        lgdt [gdt_descriptor]
+        movl %cr0, %eax
+        orl $0x1, %eax        # set PE bit
+        movl %eax, %cr0
+        ljmp $selector, $offset
+        ```
+
+- Long mode (64-bit): 64-bit register set (RAX..R15), RIP-relative addressing, syscalls via `syscall`/`sysret`. Must enable PAE and long mode via MSRs, enable paging and jump into 64-bit entry.
+    - Common instructions: `mov` with r64 registers, `syscall`/`sysret`, `lea` with RIP-relative displacement, `wrmsr`/`rdmsr` used by firmware/bootloader to set EFER.
+    - Example (GAS/AT&T):
+        ```asm
+        .intel_syntax noprefix
+        mov rax, 1
+        mov rdi, 1
+        lea rsi, [rip + msg]
+        mov rdx, len
+        syscall              # write to stdout on syscall ABI
+        ```
+
+Notes and practical considerations:
+- QEMU and real hardware both boot in real mode by default; the firmware (SeaBIOS) runs and typically loads a bootloader which switches modes.
+- You won't be able to directly execute 64-bit instructions by just writing a 64-bit binary into physical memory on a fresh CPU—switching to long mode requires privileged steps.
+- `int 0x80` is a Linux 32-bit syscall convention; modern 64-bit Linux uses `syscall` and a different calling convention (arg0..arg5 in rdi..r9). For small experiments, use the 16-bit or 64-bit examples that match the CPU mode.
+
+
 ## Assembly syntax: AT&T vs Intel (GAS vs NASM)
 
 This project supplies both GAS/AT&T (`.s`) examples and NASM/Intel (`.nasm`) samples. Both are valid for x86-64, but they use different textual conventions; knowing both helps when reading examples and debugging toolchain behavior.
