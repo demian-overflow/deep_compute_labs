@@ -17,10 +17,10 @@ Quick notes:
 ```mermaid
 flowchart LR
   Host[Host OS & Tooling] --> QEMU[QEMU Emulator]
-  QEMU -->|KVM accel| KVM[KVM (optional)]
-  QEMU --> Guest[Guest VM (CPU \n & Memory)]
-  Guest --> Devices[Emulated Devices \n (PCI, MMIO, Serial, NIC, Disk)]
-  Devices --> GuestKernel[Guest Kernel / Drivers]
+  QEMU -->|KVM accel| KVM[KVM optional]
+  QEMU --> Guest[Guest VM]
+  Guest --> Devices[Devices PCI/MMIO/Serial/NIC/Disk]
+  Devices --> GuestKernel[Guest Kernel/Drivers]
   GuestKernel --> Userland[Guest Userland]
 ```
 
@@ -74,12 +74,12 @@ gdb -ex "file /tmp/myprog.elf" -ex "target remote :1234"
 
 ```mermaid
 flowchart LR
-  Source[Source .s / .c] --> Assemble[as / gcc]
-  Assemble --> Link[ld / gcc -Ttext]
-  Link --> ELF[ELF (.elf)]
-  ELF --> Objcopy[objcopy -O binary]
-  Objcopy --> Loader[QEMU -device loader file=.., addr=..]
-  Loader --> GuestPhys[Guest Physical Memory (0x00100000)]
+  Source[Source .s / .c] --> Assemble[Assembler / GCC]
+  Assemble --> Link[Linker (ld)]
+  Link --> ELF[ELF image]
+  ELF --> Objcopy[Convert to raw binary]
+  Objcopy --> Loader[QEMU loader]
+  Loader --> GuestPhys[Guest PAddr 0x00100000]
   GuestPhys --> CPU[Guest CPU]
   QEMU -->|gdb| GDB[gdb target remote]
 ```
@@ -223,11 +223,11 @@ qemu-system-x86_64 -m 2G -cdrom ubuntu-*.iso -boot d -drive file=ubuntu.img,form
 
 ```mermaid
 flowchart LR
-  ISO[Installer ISO] --> Installer[Boot Installer in QEMU]
-  Installer --> Disk[Install to qcow2 Disk]
-  Disk --> InstalledVM[Installed Guest Disk Image]
-  InstalledVM --> Boot[Boot Installed Disk]
-  Boot --> Userland[Guest System (ssh, services)]
+  ISO[Installer ISO] --> Installer[Boot installer]
+  Installer --> Disk[Install to qcow2 disk]
+  Disk --> InstalledVM[Installed disk image]
+  InstalledVM --> Boot[Boot installed disk]
+  Boot --> Userland[Guest system - ssh & services]
 ```
 
 2) After installation, boot from the installed image (now `ubuntu.img`) using `-drive` instead of `-cdrom`.
