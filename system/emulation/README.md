@@ -14,6 +14,16 @@ Quick notes:
 - Devices are modelled as emulated hardware (e.g., NICs, storage, serial ports). Each device is exposed to the guest through a common bus (PCI, ISA, MMIO regions).
 - You can attach a raw binary, an ELF image, or a full kernel image to the emulated machine. QEMU provides multiple ways to load these images into guest physical memory or use them as block devices.
 
+```mermaid
+flowchart LR
+  Host[Host OS & Tooling] --> QEMU[QEMU Emulator]
+  QEMU -->|KVM accel| KVM[KVM (optional)]
+  QEMU --> Guest[Guest VM (CPU \n & Memory)]
+  Guest --> Devices[Emulated Devices \n (PCI, MMIO, Serial, NIC, Disk)]
+  Devices --> GuestKernel[Guest Kernel / Drivers]
+  GuestKernel --> Userland[Guest Userland]
+```
+
 Key concepts:
 - Guest physical address: the physical addresses inside the emulated guest machine (useful when testing OS/kernel code).
 - Virtual addresses: addresses produced by the guest's MMU after translation.
@@ -60,6 +70,18 @@ qemu-system-x86_64 \
 gdb -ex "file /tmp/myprog.elf" -ex "target remote :1234"
 # now you can inspect memory with normal gdb commands, e.g.:
 # in gdb: x/64xb 0x00100000  # examine 64 bytes at guest physical 0x00100000
+```
+
+```mermaid
+flowchart LR
+  Source[Source .s / .c] --> Assemble[as / gcc]
+  Assemble --> Link[ld / gcc -Ttext]
+  Link --> ELF[ELF (.elf)]
+  ELF --> Objcopy[objcopy -O binary]
+  Objcopy --> Loader[QEMU -device loader file=.., addr=..]
+  Loader --> GuestPhys[Guest Physical Memory (0x00100000)]
+  GuestPhys --> CPU[Guest CPU]
+  QEMU -->|gdb| GDB[gdb target remote]
 ```
 
 Notes:
@@ -197,6 +219,15 @@ qemu-img create -f qcow2 ubuntu.img 10G
 qemu-system-x86_64 -m 2G -cdrom ubuntu-*.iso -boot d -drive file=ubuntu.img,format=qcow2,if=virtio -nographic -serial mon:stdio -netdev user,id=net0,hostfwd=tcp::2222-:22 -device e1000,netdev=net0
 
 # use the installer to install the system onto ubuntu.img; if you want to ssh in the installed guest, add a user and openssh-server during install
+```
+
+```mermaid
+flowchart LR
+  ISO[Installer ISO] --> Installer[Boot Installer in QEMU]
+  Installer --> Disk[Install to qcow2 Disk]
+  Disk --> InstalledVM[Installed Guest Disk Image]
+  InstalledVM --> Boot[Boot Installed Disk]
+  Boot --> Userland[Guest System (ssh, services)]
 ```
 
 2) After installation, boot from the installed image (now `ubuntu.img`) using `-drive` instead of `-cdrom`.
