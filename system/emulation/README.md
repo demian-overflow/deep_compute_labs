@@ -75,7 +75,7 @@ gdb -ex "file /tmp/myprog.elf" -ex "target remote :1234"
 ```mermaid
 flowchart LR
   Source[Source .s / .c] --> Assemble[Assembler / GCC]
-  Assemble --> Link[Linker (ld)]
+  Assemble --> Link[Linker / ld]
   Link --> ELF[ELF image]
   ELF --> Objcopy[Convert to raw binary]
   Objcopy --> Loader[QEMU loader]
