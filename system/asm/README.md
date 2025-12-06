@@ -175,6 +175,19 @@ Notes and practical considerations:
 - You won't be able to directly execute 64-bit instructions by just writing a 64-bit binary into physical memory on a fresh CPU—switching to long mode requires privileged steps.
 - `int 0x80` is a Linux 32-bit syscall convention; modern 64-bit Linux uses `syscall` and a different calling convention (arg0..arg5 in rdi..r9). For small experiments, use the 16-bit or 64-bit examples that match the CPU mode.
 
+Additional Intel-mode clarifications:
+- Real-address mode (Intel: real-address mode) — CPU reset default with 16-bit semantics and the BIOS available. The A20 line and segment-based performance are relevant here.
+- Protected mode (Intel: protected mode) — 32-bit mode with GDT/LDT, segmentation, and optional Virtual-8086 (V86) attribute allowing 8086 code to run as a protected-mode task. V86 is a *mode attribute*, not a distinct CPU mode.
+- Long mode (Intel: IA-32e long mode) — 64-bit mode that requires enabling via EFER.MSR (LME/LMA and CR0/CR4/CR3 support). Intel documents the IA-32e environment as the 64-bit architecture.
+- System Management Mode (SMM) — privileged separate mode entered by SMI with its own memory area (SMRAM) and context save/restore; it's not normally exercised by boot samples and is platform-specific.
+
+Detecting mode via registers & flags:
+- CR0.PE (bit 0) controls protected mode: 0=real mode, 1=protected.
+- CR0.PG indicates paging enabled (combined with EFER.LME indicates long mode).
+- MSR EFER (MSR 0xC0000080) LME and LMA bits indicate long mode intent/state.
+- Segment selector CS (and its DPL/attributes) also matters: 16-bit code selectors vs 32/64-bit code selectors.
+
+
 
 ## Assembly syntax: AT&T vs Intel (GAS vs NASM)
 

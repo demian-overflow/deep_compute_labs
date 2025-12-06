@@ -116,6 +116,16 @@ Notes:
 - Use `-S` to pause CPU at startup, so you can connect with gdb before the guest executes.
 - For more reliable behavior, you can combine `-device loader` with a small bootstrapping ELF or a custom VM entrypoint that jumps to your loaded physical address.
 
+Boot-mode examples
+------------------
+There is an extended example set available in `system/emulation/examples/boot` demonstrating the different CPU modes and how they are entered from CPU reset. Each directory contains a `README.md` with build/run steps and a Makefile to build the sample and start QEMU. The examples include:
+
+- `real/` — an MBR that prints using BIOS and serial (real-mode demonstration);
+- `protected/` — a two-stage loader demonstrating a switch to protected mode and printing via serial in 32-bit mode;
+- `long/` — an advanced guide (and skeleton) demonstrating how to reach long mode and boot a 64-bit kernel; includes GRUB-based instructions.
+
+Refer to `system/emulation/examples/boot/README.md` for a complete walkthrough and commands to run each example.
+
 ---
 
 ## Configuring common emulated devices (examples)
