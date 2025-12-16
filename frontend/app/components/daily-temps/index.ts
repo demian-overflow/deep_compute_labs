@@ -1,8 +1,8 @@
-export { default as InputEditor } from './InputEditor'
-export { default as ArrayVisualizer } from './ArrayVisualizer'
-export { default as StackVisualizer } from './StackVisualizer'
-export { default as TraceViewer } from './TraceViewer'
-export { default as PseudocodeView } from './PseudocodeView'
-export { default as PlayControls } from './PlayControls'
-export { default as ResultView } from './ResultView'
-export { default as MetricsPanel } from './MetricsPanel'
+export { default as InputEditor } from "./InputEditor";
+export { default as ArrayVisualizer } from "./ArrayVisualizer";
+export { default as StackVisualizer } from "./StackVisualizer";
+export { default as TraceViewer } from "./TraceViewer";
+export { default as PseudocodeView } from "./PseudocodeView";
+export { default as PlayControls } from "./PlayControls";
+export { default as ResultView } from "./ResultView";
+export { default as MetricsPanel } from "./MetricsPanel";

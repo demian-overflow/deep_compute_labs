@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "yarn lint:fix && next dev",
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,md}'",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "dependencies": {
     "next": "16.0.10",
+    "prettier": "^3.7.4",
     "react": "19.2.1",
     "react-dom": "19.2.1"
   },
