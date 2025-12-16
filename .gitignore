@@ -22,3 +22,6 @@ examples/cuda/hello
 *.pdf
 *.aux
 *.log
+
+# frontend
+*/node_modules
