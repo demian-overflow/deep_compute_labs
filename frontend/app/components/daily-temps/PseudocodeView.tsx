@@ -29,14 +29,7 @@ export default function PseudocodeView({
   highlightColorMap?: Record<string, string>;
 }) {
   return (
-    <pre
-      style={{
-        background: "#fff",
-        border: "1px solid #eee",
-        padding: 12,
-        borderRadius: 6,
-      }}
-    >
+    <pre className="bg-white border border-gray-100 p-3 rounded-md">
       {lines.map((l, idx) => {
         const block = lineBlocks[idx];
         const is = block && block === highlightBlock;
@@ -45,15 +38,10 @@ export default function PseudocodeView({
         return (
           <div
             key={idx}
-            style={{
-              padding: "2px 0",
-              borderLeft: is
-                ? `4px solid ${color ?? "#f59e0b"}`
-                : "4px solid transparent",
-              paddingLeft: 8,
-            }}
+            className="py-0.5 pl-2 border-l-4"
+            style={{ borderLeftColor: is ? color ?? "var(--accent-strong)" : "transparent" }}
           >
-            <code style={{ fontSize: 13 }}>{l}</code>
+            <code className="text-sm">{l}</code>
           </div>
         );
       })}

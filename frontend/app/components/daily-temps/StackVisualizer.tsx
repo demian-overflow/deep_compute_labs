@@ -11,33 +11,20 @@ export default function StackVisualizer({
 }) {
   return (
     <div>
-      <div style={{ marginBottom: 8 }}>
+      <div className="mb-2">
         <strong>Stack (top at right)</strong>
       </div>
-      <div
-        style={{
-          minHeight: 120,
-          display: "flex",
-          gap: 8,
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
+      <div className="min-h-[120px] flex gap-2 items-center flex-wrap">
         {stack.map((s) => (
           <div
             key={s}
-            style={{
-              padding: "8px 10px",
-              background: "#fff",
-              border: "1px solid #ddd",
-              borderRadius: 6,
-            }}
+            className="px-2.5 py-2 bg-white border border-gray-200 rounded-md"
           >
-            <div style={{ fontSize: 12, color: "#666" }}>i={s}</div>
-            <div style={{ fontWeight: 600 }}>{temps[s]}</div>
+            <div className="text-xs text-gray-500">i={s}</div>
+            <div className="font-semibold">{temps[s]}</div>
           </div>
         ))}
-        {stack.length === 0 && <div style={{ color: "#888" }}>— empty —</div>}
+        {stack.length === 0 && <div className="text-gray-500">— empty —</div>}
       </div>
     </div>
   );

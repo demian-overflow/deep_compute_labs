@@ -16,34 +16,28 @@ export default function ArrayVisualizer({
   indexColors?: Record<number, string>;
 }) {
   return (
-    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+    <div className="flex gap-2 flex-wrap">
       {temps.map((t, idx) => {
         const isCurrent = idx === currentIndex;
         const inHighlight = highlight.includes(idx);
         const overrideBg = indexColors?.[idx];
         const background =
           overrideBg ??
-          (isCurrent ? "#fffae6" : inHighlight ? "#e6f7ff" : "#f6f6f6");
-        const border = isCurrent ? "2px solid #ffb020" : "1px solid #ddd";
+          (isCurrent
+            ? "var(--bg-current)"
+            : inHighlight
+            ? "var(--bg-highlight)"
+            : "var(--bg-muted)");
+        const border = isCurrent ? "2px solid var(--accent)" : "1px solid var(--border-muted)";
         return (
           <div
             key={idx}
-            style={{
-              width: 80,
-              padding: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              background,
-              border,
-              borderRadius: 6,
-            }}
+            className="w-20 p-2 flex flex-col items-center rounded-md"
+            style={{ background, border }}
           >
-            <div style={{ fontSize: 12, color: "#666" }}>i={idx}</div>
-            <div style={{ fontSize: 20, fontWeight: 600 }}>{t}</div>
-            <div style={{ fontSize: 12, color: "#333" }}>
-              res: {result?.[idx] ?? 0}
-            </div>
+            <div className="text-xs text-gray-500">i={idx}</div>
+            <div className="text-xl font-semibold">{t}</div>
+            <div className="text-xs text-gray-800">res: {result?.[idx] ?? 0}</div>
           </div>
         );
       })}

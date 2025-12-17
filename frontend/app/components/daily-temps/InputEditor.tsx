@@ -18,25 +18,23 @@ export default function InputEditor({
   presets?: Preset[];
 }) {
   return (
-    <div
-      style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8 }}
-    >
+    <div className="flex gap-2 items-center mb-2">
       <input
         aria-label="temperatures"
         value={input}
         onChange={(e) => onChange(e.target.value)}
-        style={{ flex: 1, padding: 8, fontSize: 14 }}
+        className="flex-1 p-2 text-sm"
       />
-      <button onClick={onBuild} style={{ padding: "8px 12px" }}>
+      <button onClick={onBuild} className="px-3 py-2">
         Build
       </button>
-      <button onClick={onReset} style={{ padding: "8px 12px" }}>
+      <button onClick={onReset} className="px-3 py-2">
         Reset
       </button>
       {presets.length > 0 && (
         <select
           onChange={(e) => onChange(e.target.value)}
-          style={{ padding: 8 }}
+          className="p-2"
           defaultValue=""
         >
           <option value="">Presets</option>

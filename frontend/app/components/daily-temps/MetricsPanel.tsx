@@ -7,18 +7,16 @@ export default function MetricsPanel({ steps }: { steps: Step[] }) {
   const ops = steps.length;
   const peakStack = steps.reduce((m, s) => Math.max(m, s.stack.length), 0);
   return (
-    <div style={{ border: "1px solid #eee", padding: 8, borderRadius: 6 }}>
-      <div style={{ fontSize: 12, color: "#666", marginBottom: 6 }}>
-        Metrics
-      </div>
-      <div style={{ display: "flex", gap: 12 }}>
+    <div className="border border-gray-100 p-2 rounded-md">
+      <div className="text-xs text-gray-500 mb-1">Metrics</div>
+      <div className="flex gap-3">
         <div>
-          <div style={{ fontSize: 13, fontWeight: 600 }}>{ops}</div>
-          <div style={{ fontSize: 12, color: "#666" }}>ops</div>
+          <div className="text-sm font-semibold">{ops}</div>
+          <div className="text-xs text-gray-500">ops</div>
         </div>
         <div>
-          <div style={{ fontSize: 13, fontWeight: 600 }}>{peakStack}</div>
-          <div style={{ fontSize: 12, color: "#666" }}>peak stack</div>
+          <div className="text-sm font-semibold">{peakStack}</div>
+          <div className="text-xs text-gray-500">peak stack</div>
         </div>
       </div>
     </div>
