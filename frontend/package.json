@@ -8,7 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "postinstall": "node scripts/setup-next-config-shim.js"
   },
   "dependencies": {
     "next": "16.0.10",
@@ -24,6 +27,12 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@storybook/nextjs": "^7.5.22",
+    "@storybook/addon-essentials": "^7.5.22",
+    "@storybook/addon-interactions": "^7.5.22",
+    "@storybook/testing-library": "^0.0.17",
+    "@storybook/jest": "^0.0.33",
+    "storybook": "^7.5.22"
   }
 }

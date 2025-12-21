@@ -25,3 +25,4 @@ examples/cuda/hello
 
 # frontend
 */node_modules
+*/storybook-static
