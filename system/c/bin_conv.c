@@ -50,7 +50,7 @@ int BIN_NIBBLE_HEX[4][16];
 void buildBinHexTable() {
 	int subbase = BASE;
 	for (int i = 0; i < 4; i++) {
-		subbase >>= 1;
+		subbase >>= 1; // 8 4 2 1
 		int valve = subbase;
 		int currValue = 0;
 		for (int j = 0; j < 16; j++) {
