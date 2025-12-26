@@ -35,14 +35,14 @@ export default function ValueTile({
 
   return (
     <div
-      className={`min-w-[56px] px-4 py-2 flex flex-col items-center ${className}`}
+      className={`min-w-[56px] px-4 py-2 flex flex-row items-center justify-between border-l border-black first:border-l-0 ${className}`}
       style={{ background, ...style }}
       data-testid={`value-tile-${index ?? "na"}`}
       role="group"
       aria-label={`Value tile ${index ?? ""}`}
     >
-      {index !== undefined && <div className="text-xs text-gray-500">i={index}</div>}
-      <div className="text-xl font-semibold text-center w-full">{display}</div>
+      {index !== undefined && <div className="text-xs text-gray-500 mr-3">i={index}</div>}
+      <div className="text-xl font-semibold text-left">{display}</div>
     </div>
   );
 }

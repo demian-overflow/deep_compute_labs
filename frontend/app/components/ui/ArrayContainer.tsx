@@ -38,7 +38,7 @@ export default function ArrayContainer({
 
   if (!maxVisibleElements || n <= maxVisibleElements) {
     return (
-      <div className={`flex gap-0 flex-nowrap items-center overflow-auto divide-x divide-gray-200 ${className}`}>
+      <div className={`flex gap-0 flex-nowrap items-center overflow-auto divide-x divide-black ${className}`}>
         {items.map((v, idx) => renderTile(v, idx))}
       </div>
     );
@@ -55,11 +55,11 @@ export default function ArrayContainer({
   const omitted = n - (headCount + tailCount);
 
   return (
-    <div className={`flex gap-0 flex-nowrap items-center overflow-auto divide-x divide-gray-200 ${className}`}>
+    <div className={`flex gap-0 flex-nowrap items-center overflow-auto divide-x divide-black ${className}`}>
       {head.map((v, idx) => renderTile(v as any, idx))}
 
       <div
-        className="min-w-[56px] px-4 py-2 flex flex-col items-center bg-gray-50 text-sm text-gray-700 flex-shrink-0 text-center"
+        className="min-w-[56px] px-4 py-2 flex flex-row items-center justify-center bg-gray-50 text-sm text-gray-700 flex-shrink-0 text-center border-l border-black"
         data-testid="array-container-omitted"
       >
         +{omitted} more
